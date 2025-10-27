@@ -1,10 +1,6 @@
 services:
   jellyfin:
     build: . 
-    depends_on:
-      postgres:
-        condition: service_healthy
-        restart: true
     ports:
       - 8096:8096/tcp
     environment:
