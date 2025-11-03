@@ -7,3 +7,4 @@ cache/
 config/
 media/
 .devcontainer/pgsql/
+docker/jellyfin.PgsqlMigrator.dll
