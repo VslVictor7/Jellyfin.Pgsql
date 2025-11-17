@@ -1,0 +1,29 @@
+name: Buildar e publicar imagem para o Docker Hub
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: extrair versão do Jellyfin do Dockerfile
+        id: version
+        run: |
+          VERSION=$(grep -oP '(?<=FROM jellyfin/jellyfin:)[0-9\.]+' Dockerfile)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: buildar imagem
+        run: |
+          docker build . -t victorvsl7/jellyfin-postgres:latest
+
+      - name: publicar imagem no Docker
+        run: |
+          docker login -u victorvsl7 -p ${{ secrets.DOCKER_HUB_TOKEN }}
+          docker push victorvsl7/jellyfin-postgres:latest
+          docker push victorvsl7/jellyfin-postgres:${{ env.VERSION }}
