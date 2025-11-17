@@ -20,7 +20,9 @@ jobs:
 
       - name: buildar imagem
         run: |
-          docker build . -t victorvsl7/jellyfin-postgres:latest
+          docker build . \
+            -t victorvsl7/jellyfin-postgres:latest \
+            -t victorvsl7/jellyfin-postgres:${{ env.VERSION }}
 
       - name: publicar imagem no Docker
         run: |
