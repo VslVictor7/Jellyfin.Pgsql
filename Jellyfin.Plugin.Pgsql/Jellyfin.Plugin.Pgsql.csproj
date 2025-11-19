@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>Jellyfin.Plugin.Pgsql</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Nullable>enable</Nullable>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <CodeAnalysisRuleSet>../jellyfin.ruleset</CodeAnalysisRuleSet>
@@ -14,7 +14,7 @@
     <PackageReference Include="Jellyfin.Controller" Version="10.11.3" PrivateAssets="all" />
     <PackageReference Include="Jellyfin.Model" Version="10.11.3" PrivateAssets="all" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
-    <PackageReference Include="Npgsql" Version="9.0.3" />
+    <PackageReference Include="Npgsql" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.10" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.10" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.10" PrivateAssets="all" />
