@@ -3,7 +3,7 @@ name: Buildar e publicar imagem para o Docker Hub
 on:
   push:
     branches:
-      - master
+      - fork
 
 jobs:
   publish_images:
