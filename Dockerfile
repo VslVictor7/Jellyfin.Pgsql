@@ -27,13 +27,20 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,video,utility
+RUN mkdir -p /usr/local/bin /patched-lib
+
+COPY patch.sh /usr/local/bin/patch.sh
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY docker/entrypoint.sh /usr/local/bin/original-entrypoint.sh
+
 # Copy the published plugin and config files
 COPY --from=build /app/publish/ /jellyfin-pgsql/plugin/
-COPY docker/entrypoint.sh /entrypoint.sh
 COPY docker/database.xml /jellyfin-pgsql/database.xml
 COPY docker/jellyfindb.load /jellyfin-pgsql/jellyfindb.load
 
 # Make entrypoint executable
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /usr/local/bin/patch.sh /usr/local/bin/original-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
