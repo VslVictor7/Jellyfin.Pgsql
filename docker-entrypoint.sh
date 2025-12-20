@@ -5,12 +5,13 @@ set -e
 echo "/patched-lib" > /etc/ld.so.conf.d/000-patched-lib.conf
 mkdir -p "/patched-lib"
 PATCH_OUTPUT_DIR=/patched-lib /usr/local/bin/patch.sh
-cd /patched-lib
+
+cd /patched-lib || exit 1
 for f in * ; do
     suffix="${f##*.so}"
     name="$(basename "$f" ".$suffix")"
-    [ -h "$name" ] || ln -sf "$f" "$name"
-    [ -h "$name" ] || ln -sf "$f" "$name.1"
+    [ ! -e "$name" ] && ln -sf "$f" "$name"
+    [ ! -e "$name.1" ] && ln -sf "$f" "$name.1"
 done
 ldconfig
 [ "$OLDPWD" ] && cd -
