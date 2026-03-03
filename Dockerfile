@@ -17,7 +17,7 @@ RUN dotnet publish Jellyfin.Plugin.Pgsql.sln -c Release --no-restore -o /app/pub
 # Final stage - Jellyfin with plugin
 FROM jellyfin/jellyfin:10.11.6
 
-# Install PostgreSQL 17 client tools for backup/restore functionality
+# Install PostgreSQL 18 client tools for backup/restore functionality
 RUN apt-get update && \
     apt-get install -y wget ca-certificates gnupg lsb-release && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql-keyring.gpg && \
