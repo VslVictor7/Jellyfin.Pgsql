@@ -13,7 +13,7 @@ namespace Jellyfin.Plugin.Pgsql.Migrations
 {
     [DbContext(typeof(JellyfinDbContext))]
     [Migration("20260524120336_AddUniqueNormalizedUsernameIndex")]
-    partial class Jellyfin101111_NormalizedUsernameIndex
+    partial class Jellyfin101111NormalizedUsernameIndex
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

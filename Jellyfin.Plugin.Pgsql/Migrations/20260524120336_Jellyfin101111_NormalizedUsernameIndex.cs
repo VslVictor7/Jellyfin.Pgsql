@@ -5,7 +5,7 @@
 namespace Jellyfin.Plugin.Pgsql.Migrations;
 
 /// <inheritdoc />
-public partial class Jellyfin101111_NormalizedUsernameIndex : Migration
+public partial class Jellyfin101111NormalizedUsernameIndex : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)

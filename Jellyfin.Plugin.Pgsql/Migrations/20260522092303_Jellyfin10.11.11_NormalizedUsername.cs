@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Jellyfin.Plugin.Pgsql.Migrations;
 
 /// <inheritdoc />
-public partial class Jellyfin101111_NormalizedUsername : Migration
+public partial class Jellyfin101111NormalizedUsername : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
