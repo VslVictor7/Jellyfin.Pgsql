@@ -15,7 +15,7 @@ RUN dotnet restore Jellyfin.Plugin.Pgsql.sln
 RUN dotnet publish Jellyfin.Plugin.Pgsql.sln -c Release --no-restore -o /app/publish
 
 # Final stage - Jellyfin with plugin
-FROM jellyfin/jellyfin:10.11.10
+FROM jellyfin/jellyfin:10.11.11
 
 # Install PostgreSQL 18 client tools for backup/restore functionality
 RUN apt-get update && \
@@ -31,7 +31,8 @@ RUN apt-get update && \
 COPY --from=build /app/publish/ /jellyfin-pgsql/plugin/
 COPY docker/entrypoint.sh /entrypoint.sh
 COPY docker/database.xml /jellyfin-pgsql/database.xml
-COPY docker/jellyfindb.load /jellyfin-pgsql/jellyfindb.load
+# COPY docker/jellyfindb.load /jellyfin-pgsql/jellyfindb.load
+# COPY docker/jellyfin.PgsqlMigrator.dll /jellyfin-pgsql/jellyfin.PgsqlMigrator.dll
 
 # Make entrypoint executable
 RUN chmod +x /entrypoint.sh
