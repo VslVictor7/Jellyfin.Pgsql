@@ -30,6 +30,9 @@ services:
       # Optional settings bellow, uncomment if you want to connect using SSL
       # - POSTGRES_SSLMODE=Require
       # - POSTGRES_TRUSTSERVERCERTIFICATE=true
+      # Optional: per-command timeout in seconds (default 30, 0 = no limit).
+      # Raise it if large libraries hit query timeouts.
+      # - POSTGRES_COMMAND_TIMEOUT=120
 ```
 
 # Build
