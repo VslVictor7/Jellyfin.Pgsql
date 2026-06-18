@@ -5,6 +5,13 @@ This plugin adds postgres SQL support to [Jellyfin Server](https://github.com/je
 
 > [!IMPORTANT]
 > Pleae note that there are several additional steps required to make this work and it is to be considered __HIGHLY__ experimental.
+> 
+> This plugin is __NOT__ meant for a production jellyfin server. This is just for advanced users to experiment and evaluate potential issues we will face once we will include pgsql support in the jellyfin server by default.
+> 
+> Issues __MAY__ not be fixed by me and if i dont have the time to work on it stuff will not nessesarily be done.
+> 
+> # !!!Use at your own risk!!!
+> Full explaination here: https://github.com/JPVenson/Jellyfin.Pgsql/issues/27
 
 # How to use it
 
