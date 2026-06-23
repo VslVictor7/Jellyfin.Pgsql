@@ -8,10 +8,17 @@ This plugin adds postgres SQL support to [Jellyfin Server](https://github.com/je
 
 > [!IMPORTANT]
 > Pleae note that there are several additional steps required to make this work and it is to be considered __HIGHLY__ experimental.
+> 
+> This plugin is __NOT__ meant for a production jellyfin server. This is just for advanced users to experiment and evaluate potential issues we will face once we will include pgsql support in the jellyfin server by default.
+> 
+> Issues __MAY__ not be fixed by me and if i dont have the time to work on it stuff will not nessesarily be done.
+> 
+> # !!!Use at your own risk!!!
+> Full explaination here: https://github.com/JPVenson/Jellyfin.Pgsql/issues/27
 
 # How to use it
 
-You can use your existing Jellyfin compose file and change the image accordingly to: `ghcr.io/jpvenson/jellyfin.pgsql:10.11.8-1`.
+You can use your existing Jellyfin compose file and change the image accordingly to: `ghcr.io/jpvenson/jellyfin.pgsql:10.11.11-1`.
 
 You need to add the connection parameters as enviornment variables in your compose file:
 
@@ -19,7 +26,7 @@ You need to add the connection parameters as enviornment variables in your compo
 
 services:
   jellyfin:
-    image: ghcr.io/jpvenson/jellyfin.pgsql:10.11.8-1
+    image: ghcr.io/jpvenson/jellyfin.pgsql:10.11.11-1
     volumes:
         - /path/to/config:/config
         - /path/to/cache:/cache
@@ -33,6 +40,9 @@ services:
       # Optional settings bellow, uncomment if you want to connect using SSL
       # - POSTGRES_SSLMODE=Require
       # - POSTGRES_TRUSTSERVERCERTIFICATE=true
+      # Optional: per-command timeout in seconds (default 30, 0 = no limit).
+      # Raise it if large libraries hit query timeouts.
+      # - POSTGRES_COMMAND_TIMEOUT=120
 ```
 
 # Build

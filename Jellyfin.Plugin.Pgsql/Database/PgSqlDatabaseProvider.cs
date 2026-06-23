@@ -146,11 +146,18 @@ public sealed class PgSqlDatabaseProvider : IJellyfinDatabaseProvider
         _logger.LogInformation("Starting PostgreSQL backup: {BackupFile}", backupFile);
 
         process.Start();
+
+        // Read both pipes while pg_dump runs. Its --verbose output goes to stderr,
+        // and leaving the redirected pipe unread will deadlock once it fills
+        // (JPVenson/Jellyfin.Pgsql#39).
+        var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
+        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
         await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+        await stdoutTask.ConfigureAwait(false);
+        var error = await stderrTask.ConfigureAwait(false);
 
         if (process.ExitCode != 0)
         {
-            var error = await process.StandardError.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogError("pg_dump failed with exit code {ExitCode}: {Error}", process.ExitCode, error);
             throw new InvalidOperationException($"pg_dump failed: {error}");
         }
@@ -190,11 +197,17 @@ public sealed class PgSqlDatabaseProvider : IJellyfinDatabaseProvider
         _logger.LogInformation("Starting PostgreSQL restore from: {BackupFile}", backupFile);
 
         process.Start();
+
+        // Same reason as MigrationBackupFast: read the pipes while psql runs so a
+        // large restore can't fill the redirected output buffer and deadlock.
+        var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
+        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
         await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+        await stdoutTask.ConfigureAwait(false);
+        var error = await stderrTask.ConfigureAwait(false);
 
         if (process.ExitCode != 0)
         {
-            var error = await process.StandardError.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
             _logger.LogError("psql restore failed with exit code {ExitCode}: {Error}", process.ExitCode, error);
             throw new InvalidOperationException($"psql restore failed: {error}");
         }
@@ -263,7 +276,11 @@ public sealed class PgSqlDatabaseProvider : IJellyfinDatabaseProvider
             Port = int.Parse(Environment.GetEnvironmentVariable("POSTGRES_PORT") ?? "5432", CultureInfo.InvariantCulture),
             Database = Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "jellyfin",
             Username = Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "jellyfin",
-            Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? throw new InvalidOperationException("PostgreSQL password must be provided via POSTGRES_PASSWORD environment variable")
+            Password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ?? throw new InvalidOperationException("PostgreSQL password must be provided via POSTGRES_PASSWORD environment variable"),
+
+            // Command timeout in seconds (0 = no limit). Defaults to Npgsql's 30s.
+            // Raise it via POSTGRES_COMMAND_TIMEOUT for slow queries on large libraries.
+            CommandTimeout = int.Parse(Environment.GetEnvironmentVariable("POSTGRES_COMMAND_TIMEOUT") ?? "30", CultureInfo.InvariantCulture)
         };
 
         if (includeErrorDetail)
